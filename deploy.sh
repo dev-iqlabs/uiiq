@@ -8,8 +8,8 @@
 set -euo pipefail
 
 HOST="ssh.gb.stackcp.com"
-HOST_USER=""          # e.g. uiiq.co.uk+uiiq.co.uk
-WEBROOT=""            # e.g. /home/sites/abc/1/123abc456def/public_html
+HOST_USER="uiiq.co.uk"
+WEBROOT="/home/sites/34b/0/0518876bc6/public_html"
 DEST="${WEBROOT}/wp-content/mu-plugins"
 
 if [[ -z "$HOST_USER" || -z "$WEBROOT" ]]; then
