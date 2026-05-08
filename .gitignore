@@ -1,0 +1,37 @@
+# WordPress core — not tracked; install separately on server
+wp-admin/
+wp-includes/
+wp-config.php
+wp-*.php
+xmlrpc.php
+index.php
+license.txt
+readme.html
+
+# Standard WP uploads and cache
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/backup-db/
+wp-content/advanced-cache.php
+wp-content/wp-cache-config.php
+
+# Plugins — install via WP Admin or deploy scripts; not tracked here
+wp-content/plugins/
+
+# Theme — deployed from dev-iqlabs/iqex-theme; not tracked here
+wp-content/themes/
+
+# Host-managed mu-plugins (20i StackCP cache integration)
+wp-content/mu-plugins/wp-stack-cache.php
+
+# Environment / secrets
+.env
+.env.*
+wp-config-local.php
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
