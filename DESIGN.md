@@ -17,7 +17,7 @@ typography:
     fontSize: 72px
     fontWeight: 700
     lineHeight: 1.05
-    letterSpacing: "-2px"
+    letterSpacing: "-2.5px"
   display-lg:
     fontFamily: "Lato, sans-serif"
     fontSize: 56px
@@ -157,6 +157,41 @@ components:
     textColor: "{colors.secondary}"
     rounded: "{rounded.full}"
     padding: 12px
+  status-badge-active:
+    backgroundColor: "#eef1fc"
+    textColor: "{colors.secondary}"
+    rounded: "{rounded.full}"
+    padding: 6px
+  status-badge-success:
+    backgroundColor: "#e8f7ef"
+    textColor: "#0f5132"
+    rounded: "{rounded.full}"
+    padding: 6px
+  status-badge-warning:
+    backgroundColor: "#fef3e0"
+    textColor: "#7c4a00"
+    rounded: "{rounded.full}"
+    padding: 6px
+  status-badge-error:
+    backgroundColor: "#fce8e8"
+    textColor: "#7f1d1d"
+    rounded: "{rounded.full}"
+    padding: 6px
+  pricing-tab-default:
+    backgroundColor: "transparent"
+    textColor: "#5a5a5c"
+    rounded: "{rounded.full}"
+    padding: 12px
+  pricing-tab-selected:
+    backgroundColor: "{colors.primary}"
+    textColor: "#ffffff"
+    rounded: "{rounded.full}"
+    padding: 12px
+  changelog-row:
+    backgroundColor: "{colors.surface}"
+    textColor: "#1c1c1e"
+    rounded: "{rounded.md}"
+    padding: 16px
 ---
 
 ## Overview
@@ -199,6 +234,17 @@ The visual language is clean, confident, and SaaS-modern. Inspired by Mintlify's
 | Hairline | `#e5e5e5` | Borders, dividers |
 | Hairline Soft | `#ededed` | Table dividers, quiet separators |
 | Footer Separator | `#2d3d8a` | Rule inside dark footer |
+
+### Dark Surfaces (hero & nav contexts)
+
+Four-step deep indigo ladder used in hero sections, header, and footer.
+
+| Token | Value | Use |
+|---|---|---|
+| Dark Base | `#141d4a` | Deepest — CSS var `--wp--preset--color--dark` |
+| Dark 2 | `#1e2d6b` | Header, footer, standard dark hero background |
+| Dark 3 | `#2d3d8a` | Footer separator, hovered dark surface lift |
+| Dark 4 | `#3d4ea0` | Lightest dark surface — subtle panel lift in dark contexts |
 
 ### Text
 
@@ -310,6 +356,26 @@ Hover: darken primary to `#3d57c7`. Focus: 3px indigo ghost ring `rgba(79,107,22
 Small pill labels used in nav and hero to signal which module a feature belongs to.
 - Background: `#eef1fc`, Text: `#4F6BDF`, 9999px radius.
 - Labels: **Grow**, **Run**, **Sell**.
+
+### Status Badges
+
+Small pill indicators for booking and operational states.
+- **status-badge-active** — indigo ghost tint `#eef1fc`, indigo text. Active bookings, live sessions.
+- **status-badge-success** — green tint `#e8f7ef`, success green text. Confirmed, paid, completed.
+- **status-badge-warning** — amber tint `#fef3e0`, warning amber text. Pending, expiring, low capacity.
+- **status-badge-error** — red tint `#fce8e8`, error red text. Failed payment, overdue, cancelled.
+
+### Pricing Tabs
+
+Pill-shaped toggle for pricing period or tier selection.
+- **pricing-tab-default** — no fill, steel `#5a5a5c` text. Unselected state.
+- **pricing-tab-selected** — indigo fill, white text. Active selection.
+
+### Changelog Row
+
+Full-width row pattern for product update logs on changelog and release notes pages.
+- Date label in `label-sm` at left. Release note body in `body-sm`.
+- Hairline border separator between rows. White background, 8px radius on hover.
 
 ### Inputs
 
