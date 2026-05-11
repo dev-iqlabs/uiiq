@@ -1,19 +1,19 @@
 # UIIQ Website — Site Plan
 
 **Site:** uiiq.co.uk
-**Purpose:** Marketing / "shop window" for the UIIQ platform — bookings, marketing, and operations all-in-one.
-**Stack:** WordPress + iqex-block-theme + UBMS ecosystem plugins
+**Purpose:** Marketing / "shop window" for the UIIQ platform — Sell, Grow, and Run your business all in one place.
+**Stack:** WordPress + iqex-block-theme + ubms-connect plugin
 **Last updated:** May 2026
 
 ---
 
 ## What the site needs to do
 
-1. Explain UIIQ (UBMS + UVOS + POSM) as a single, unified platform
+1. Explain UIIQ (Grow + Run + Sell) as a single, unified platform
 2. Speak directly to each sector the platform serves — sector-specific landing pages
-3. Drive demos and sign-ups via POSM booking widget or contact form
+3. Drive demos and sign-ups via booking widget or contact form
 4. Rank on Google for sector-specific terms ("booking software for", "venue management system", etc.)
-5. Communicate back to the UIIQ app (UBMS AI editor, SEO dashboard) via iqex-ubms-bridge
+5. Communicate back to the UIIQ app (AI editor, SEO dashboard) via ubms-connect
 
 ---
 
@@ -23,12 +23,12 @@
 
 | Page | Slug | Purpose |
 |---|---|---|
-| Home | `/` | Hero + platform overview + sector cards + social proof + CTA |
-| Marketing (UBMS) | `/marketing` | Deep-dive on campaigns, CRM, social, SEO, ads |
-| Operations (UVOS) | `/operations` | Deep-dive on tasks, HR, planning, compliance |
-| Bookings & POS (POSM) | `/bookings` | Deep-dive on experiences, ticketing, till, memberships |
+| Home | `/` | Hero + platform overview + module cards + sector grid + social proof + CTA |
+| Sell (Bookings & POS) | `/sell` | Deep-dive on experiences, ticketing, till, memberships, OTA |
+| Grow (Marketing) | `/grow` | Deep-dive on campaigns, CRM, social, SEO, paid ads |
+| Run (Operations) | `/run` | Deep-dive on tasks, HR, planning, compliance |
 | Pricing | `/pricing` | Tiered plans with module breakdown |
-| Book a Demo | `/demo` | POSM booking widget or contact form embedded here |
+| Book a Demo | `/demo` | Booking widget or contact form embedded here |
 | About | `/about` | Ultimate Image / IQ Labs — who we are |
 | Contact | `/contact` | Contact form via `[ubms_form]` shortcode |
 | Privacy Policy | `/privacy-policy` | GDPR |
@@ -44,10 +44,10 @@ Each page speaks directly to a named sector — custom headline, pain points, re
 | Attractions & Experiences | `/sectors/attractions` | Timed sessions, QR check-in, Viator/GetYourGuide OTA sync, dynamic pricing |
 | Arts & Culture | `/sectors/arts-culture` | Ticketing, memberships, gift vouchers, donor management via CRM |
 | Sports & Leisure | `/sectors/sports-leisure` | Class bookings, membership check-in, staff rota (HR), timesheet clock-in |
-| Events & Entertainment | `/sectors/events` | Ticketing, capacity management, POSM Till, promo codes, social scheduling |
+| Events & Entertainment | `/sectors/events` | Ticketing, capacity management, POS till, promo codes, social scheduling |
 | Education & Training | `/sectors/education` | HR onboarding, training matrix, task management, compliance reminders |
 | Health & Wellness | `/sectors/health-wellness` | Appointment bookings, memberships, staff timesheets, client email flows |
-| Retail & Commerce | `/sectors/retail` | POSM Till, WooCommerce integration, B2B shop, UBMS order workflow |
+| Retail & Commerce | `/sectors/retail` | POS till, WooCommerce integration, B2B shop, order workflow |
 | Councils & Public Sector | `/sectors/public-sector` | Venue hire, event ticketing, compliance vault, staff HR, procurement trail |
 | Theatres & Performing Arts | `/sectors/theatre` | Seated ticketing, gift cards, membership tiers, social media scheduling |
 
@@ -57,16 +57,16 @@ Each page speaks directly to a named sector — custom headline, pain points, re
 
 ```
 1. Hero (iqex/hero-media)
-   - Headline: "One platform. Bookings, marketing, and operations — all in one place."
-   - Sub: "UIIQ brings POSM, UBMS, and UVOS together so every part of your business talks to each other."
+   - Headline: "One platform. Sell, Grow, and Run your business — all in one place."
+   - Sub: "UIIQ connects your bookings, marketing, and operations so every part of your business works together."
    - CTAs: [Book a Demo] [See Pricing]
    - Background: short looping brand video or dark overlay image
 
 2. Module strip (3 cards)
-   - POSM: Bookings & POS — take bookings, run your till, manage members
-   - UBMS: Marketing — campaigns, social, SEO, paid ads, CRM
-   - UVOS: Operations — tasks, HR, planning, compliance
-   Each links to its own deep-dive page.
+   - Sell — take bookings, run your till, manage members and OTA channels
+   - Grow — campaigns, social scheduling, SEO, paid ads, CRM
+   - Run — tasks, HR, planning, compliance, virtual office
+   Each links to its own deep-dive page (/sell, /grow, /run).
 
 3. "Who it's for" sector grid
    - 10 sector cards with icon + short description + link to sector landing page
@@ -89,7 +89,7 @@ Each page speaks directly to a named sector — custom headline, pain points, re
    - "Ready to see it in action?" → [Book a Demo] button → /demo
 
 8. Footer
-   - Links: product modules, sectors, pricing, about, contact, privacy, terms
+   - Links: Sell, Grow, Run, Pricing, Sectors, About, Contact, Privacy, Terms
 ```
 
 ---
@@ -102,7 +102,7 @@ Each sector page follows the same structure (single WP template with block patte
 1. Hero — sector-specific headline + sub-headline + CTA
 2. "Built for [sector]" — 3–4 pain points addressed by UIIQ
 3. Feature highlights — 4–6 relevant UIIQ features with icons
-4. Module breakdown — which of POSM / UBMS / UVOS is most relevant + how they connect
+4. Module breakdown — which of Sell / Grow / Run is most relevant + how they connect
 5. Quote / case study placeholder
 6. Pricing strip (link to /pricing)
 7. Demo CTA
@@ -114,10 +114,9 @@ Each sector page follows the same structure (single WP template with block patte
 
 | Plugin | What it enables on this site |
 |---|---|
-| `iqex-ubms-bridge` | UBMS Website AI editor can read and edit page content; brand meta REST endpoint |
-| `ubms-seo` | Live page URLs surfaced to UBMS SEO dashboard; Yoast replacement |
-| `ubms-email` | All WP transactional mail (contact forms, password reset) routes via SendGrid |
-| `posm-booking` | `[posm_booking vendor="uiiq"]` shortcode on /demo page; gift card check shortcode |
+| `ubms-connect` | Core: connects site to UIIQ platform (API base, tenant slug, API key). Modules: Website Pages (AI editor reads/edits page content), SEO push, email via SendGrid, booking shortcodes. |
+
+ubms-connect replaces the old stack of separate plugins (iqex-ubms-bridge, ubms-seo, ubms-email, posm-booking). Single install, all modules configured via the Settings UI.
 
 ---
 
@@ -126,10 +125,10 @@ Each sector page follows the same structure (single WP template with block patte
 ```php
 define( 'IQEX_API_TOKEN',          'your-token' );
 define( 'IQEX_API_BASE',           'https://api.iqex.co.uk' );
-define( 'UBMS_SENDGRID_API_KEY',   'SG.xxx' );
-define( 'IQEX_UBMS_BRIDGE_SECRET', 'your-hmac-secret' );
 define( 'GITHUB_PAT',              'ghp_xxx' );
 ```
+
+Remaining credentials (SendGrid key, HMAC secrets, POSM API key) are entered via the ubms-connect Settings UI in WP admin — no wp-config.php constants needed for those.
 
 ---
 
@@ -138,9 +137,9 @@ define( 'GITHUB_PAT',              'ghp_xxx' );
 | Page | Primary keyword target |
 |---|---|
 | Home | "all-in-one venue management software UK" |
-| /bookings | "online booking system for venues UK" |
-| /marketing | "venue marketing software UK" |
-| /operations | "venue operations management software" |
+| /sell | "online booking system for venues UK" |
+| /grow | "venue marketing software UK" |
+| /run | "venue operations management software" |
 | /sectors/hospitality | "hospitality management software UK" |
 | /sectors/attractions | "attraction booking software UK" |
 | /sectors/events | "event ticketing and management software UK" |
@@ -159,11 +158,11 @@ define( 'GITHUB_PAT',              'ghp_xxx' );
 1. Set up 20i stack + WordPress install + domain
 2. Install iqex-block-theme (pull from GitHub with PAT)
 3. Push this repo's mu-plugins via Git integration or deploy.sh
-4. Install + configure UBMS ecosystem plugins (bridge, seo, email, posm-booking)
+4. Install + configure ubms-connect (Website Pages, SEO, email, POSM modules)
 5. Add wp-config.php constants
 6. Build homepage blocks
-7. Build /bookings, /marketing, /operations deep-dive pages
+7. Build /sell, /grow, /run deep-dive pages
 8. Build /pricing and /demo pages
 9. Build sector landing pages (10 × template)
-10. Connect UBMS SEO dashboard + Website AI in UBMS settings
+10. Connect UIIQ SEO dashboard + Website AI in UIIQ app settings
 11. Set up POSM vendor record for uiiq.co.uk (for the booking widget on /demo)
