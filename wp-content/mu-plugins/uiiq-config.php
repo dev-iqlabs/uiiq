@@ -2,7 +2,7 @@
 /**
  * Plugin Name: UIIQ Config
  * Description: IQEX API credential sync, brand colours, Lato font, and uiiq_tenant role for the UIIQ marketing site.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Ultimate Image
  */
 
@@ -26,6 +26,18 @@ add_action( 'init', function (): void {
 	}
 }, 5 );
 
+// Disable WordPress emoji (removes injected emoji <img> tags and scripts).
+remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+remove_action( 'wp_print_styles', 'print_emoji_styles' );
+remove_action( 'admin_print_styles', 'print_emoji_styles' );
+remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
+remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+add_filter( 'tiny_mce_plugins', function( $plugins ) {
+	return is_array( $plugins ) ? array_diff( $plugins, [ 'wpemoji' ] ) : [];
+} );
+
 // UIIQ brand: Indigo #4F6BDF primary, Lato font throughout.
 // Loaded late (priority 99) to override iqex-theme defaults.
 add_action( 'wp_head', function (): void {
@@ -47,6 +59,7 @@ body, h1, h2, h3, h4, h5, h6, p, a, li, button, input, select, textarea {
 .wp-site-title {
 	font-family: "Lato", sans-serif !important;
 }
+img.emoji { display: none !important; }
 .uiiq-login-btn {
 	display: inline-flex;
 	align-items: center;
@@ -69,11 +82,13 @@ body, h1, h2, h3, h4, h5, h6, p, a, li, button, input, select, textarea {
 	color: #1e2d6b !important;
 }
 .uiiq-login-item { list-style: none; }
-.iqex-hero-media__overlay {
+.iqex-hero-media.is-text-left .iqex-hero-media__overlay,
+.iqex-hero-media .iqex-hero-media__overlay {
 	text-align: center !important;
 	align-items: center !important;
 }
-.iqex-hero-media__heading,
+.iqex-hero-media.is-text-left .iqex-hero-media__heading,
+.iqex-hero-media .iqex-hero-media__heading,
 .iqex-hero-media__overlay p,
 .iqex-hero-media__overlay .wp-block-buttons {
 	text-align: center !important;
@@ -84,14 +99,13 @@ body, h1, h2, h3, h4, h5, h6, p, a, li, button, input, select, textarea {
 
 // Redirect existing theme Login link to app.uiiq.co.uk and style it as a button.
 // The theme outputs a Login link in the header; we swap its href via JS and apply
-// the indigo pill style. Targets any header anchor whose text or href suggests login.
+// the white pill style. Targets any header anchor whose text or href suggests login.
 add_action( 'wp_footer', function (): void {
 	echo '<script>
 (function(){
   var header = document.querySelector("header, [role=banner]");
   if (!header) return;
-  var links = header.querySelectorAll("a");
-  links.forEach(function(a){
+  header.querySelectorAll("a").forEach(function(a){
     var href = (a.getAttribute("href") || "").toLowerCase();
     var text = (a.textContent || "").trim().toLowerCase();
     if (href.indexOf("page_id") !== -1 || text === "login" || text === "log in") {
