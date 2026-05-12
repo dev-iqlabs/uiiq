@@ -2,7 +2,7 @@
 /**
  * Plugin Name: UIIQ Config
  * Description: IQEX API credential sync, brand colours, Lato font, and uiiq_tenant role for the UIIQ marketing site.
- * Version: 1.2.0
+ * Version: 1.3.0
  * Author: Ultimate Image
  */
 
@@ -38,8 +38,7 @@ add_filter( 'tiny_mce_plugins', function( $plugins ) {
 	return is_array( $plugins ) ? array_diff( $plugins, [ 'wpemoji' ] ) : [];
 } );
 
-// UIIQ brand: Indigo #4F6BDF primary, Lato font throughout.
-// Loaded late (priority 99) to override iqex-theme defaults.
+// UIIQ brand styles — loaded late (priority 99) to override iqex-theme defaults.
 add_action( 'wp_head', function (): void {
 	echo '<link rel="preconnect" href="https://fonts.googleapis.com">' . "\n";
 	echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
@@ -60,6 +59,8 @@ body, h1, h2, h3, h4, h5, h6, p, a, li, button, input, select, textarea {
 	font-family: "Lato", sans-serif !important;
 }
 img.emoji { display: none !important; }
+
+/* ── UIIQ app button ─────────────────────────────── */
 .uiiq-login-btn {
 	display: inline-flex;
 	align-items: center;
@@ -82,6 +83,17 @@ img.emoji { display: none !important; }
 	color: #1e2d6b !important;
 }
 .uiiq-login-item { list-style: none; }
+
+/* ── Hide clutter from nav (theme adds all pages) ── */
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href="/"]),
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/terms/"]),
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/privacy-policy/"]),
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/about/"]),
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/contact/"]) {
+	display: none !important;
+}
+
+/* ── Hero centering ──────────────────────────────── */
 .iqex-hero-media.is-text-left .iqex-hero-media__overlay,
 .iqex-hero-media .iqex-hero-media__overlay {
 	text-align: center !important;
@@ -99,12 +111,36 @@ img.emoji { display: none !important; }
 	margin-left: auto !important;
 	margin-right: auto !important;
 }
+
+/* ── Pricing page: brand colours on tables ──────── */
+.pricing-table th,
+.wp-block-table thead th,
+.wp-block-table thead td {
+	background: #4F6BDF !important;
+	color: #fff !important;
+	font-weight: 700 !important;
+	letter-spacing: 0.03em;
+}
+.wp-block-table table {
+	border-collapse: collapse !important;
+	width: 100% !important;
+}
+.wp-block-table td, .wp-block-table th {
+	border: 1px solid #e0e4f5 !important;
+	padding: 10px 14px !important;
+}
+.wp-block-table tbody tr:nth-child(even) td {
+	background: #f6f8ff !important;
+}
+/* Pricing amounts */
+.is-style-stripes .wp-block-table td:first-child,
+.wp-block-table td:first-child {
+	font-weight: 600;
+}
 </style>' . "\n";
 }, 99 );
 
 // Redirect existing theme Login link to app.uiiq.co.uk and style it as a button.
-// The theme outputs a Login link in the header; we swap its href via JS and apply
-// the white pill style. Targets any header anchor whose text or href suggests login.
 add_action( 'wp_footer', function (): void {
 	echo '<script>
 (function(){
