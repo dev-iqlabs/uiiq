@@ -72,13 +72,26 @@ body, h1, h2, h3, h4, h5, h6, p, a, li, button, input, select, textarea {
 </style>' . "\n";
 }, 99 );
 
-// Add "Login" button to block-theme navigation (FSE themes).
-add_filter( 'render_block_core/navigation', function ( string $html ): string {
-	$btn = '<a href="https://app.uiiq.co.uk" class="uiiq-login-btn">Login</a>';
-	return str_replace( '</nav>', $btn . '</nav>', $html );
-} );
-
-// Fallback: add "Login" to classic wp_nav_menu output.
-add_filter( 'wp_nav_menu_items', function ( string $items ): string {
-	return $items . '<li class="menu-item uiiq-login-item"><a href="https://app.uiiq.co.uk" class="uiiq-login-btn">Login</a></li>';
+// Redirect existing theme Login link to app.uiiq.co.uk and style it as a button.
+// The theme outputs a Login link in the header; we swap its href via JS and apply
+// the indigo pill style. Targets any header anchor whose text or href suggests login.
+add_action( 'wp_footer', function (): void {
+	echo '<script>
+(function(){
+  var header = document.querySelector("header, [role=banner]");
+  if (!header) return;
+  var links = header.querySelectorAll("a");
+  links.forEach(function(a){
+    var href = (a.getAttribute("href") || "").toLowerCase();
+    var text = (a.textContent || "").trim().toLowerCase();
+    if (href.indexOf("page_id") !== -1 || text === "login" || text === "log in") {
+      a.href = "https://app.uiiq.co.uk";
+      a.className = (a.className ? a.className + " " : "") + "uiiq-login-btn";
+      a.textContent = "Login";
+      a.setAttribute("target", "_blank");
+      a.setAttribute("rel", "noopener");
+    }
+  });
+})();
+</script>' . "\n";
 } );
