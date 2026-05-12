@@ -47,5 +47,38 @@ body, h1, h2, h3, h4, h5, h6, p, a, li, button, input, select, textarea {
 .wp-site-title {
 	font-family: "Lato", sans-serif !important;
 }
+.uiiq-login-btn {
+	display: inline-flex;
+	align-items: center;
+	padding: 8px 20px;
+	background: #4F6BDF;
+	color: #fff !important;
+	border-radius: 6px;
+	font-family: "Lato", sans-serif !important;
+	font-weight: 700;
+	font-size: 14px;
+	letter-spacing: 0.01em;
+	text-decoration: none !important;
+	margin-left: 16px;
+	transition: background 0.18s;
+	white-space: nowrap;
+}
+.uiiq-login-btn:hover,
+.uiiq-login-btn:focus {
+	background: #3a55c7;
+	color: #fff !important;
+}
+.uiiq-login-item { list-style: none; }
 </style>' . "\n";
 }, 99 );
+
+// Add "Login" button to block-theme navigation (FSE themes).
+add_filter( 'render_block_core/navigation', function ( string $html ): string {
+	$btn = '<a href="https://app.uiiq.co.uk" class="uiiq-login-btn">Login</a>';
+	return str_replace( '</nav>', $btn . '</nav>', $html );
+} );
+
+// Fallback: add "Login" to classic wp_nav_menu output.
+add_filter( 'wp_nav_menu_items', function ( string $items ): string {
+	return $items . '<li class="menu-item uiiq-login-item"><a href="https://app.uiiq.co.uk" class="uiiq-login-btn">Login</a></li>';
+} );
