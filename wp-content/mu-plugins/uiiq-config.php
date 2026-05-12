@@ -50,25 +50,35 @@ body, h1, h2, h3, h4, h5, h6, p, a, li, button, input, select, textarea {
 .uiiq-login-btn {
 	display: inline-flex;
 	align-items: center;
-	padding: 8px 20px;
-	background: #4F6BDF;
-	color: #fff !important;
+	padding: 7px 18px;
+	background: #fff;
+	color: #1e2d6b !important;
 	border-radius: 6px;
 	font-family: "Lato", sans-serif !important;
-	font-weight: 700;
-	font-size: 14px;
-	letter-spacing: 0.01em;
+	font-weight: 900;
+	font-size: 13px;
+	letter-spacing: 0.04em;
 	text-decoration: none !important;
 	margin-left: 16px;
-	transition: background 0.18s;
+	transition: background 0.18s, color 0.18s;
 	white-space: nowrap;
 }
 .uiiq-login-btn:hover,
 .uiiq-login-btn:focus {
-	background: #3a55c7;
-	color: #fff !important;
+	background: #e8ecff;
+	color: #1e2d6b !important;
 }
 .uiiq-login-item { list-style: none; }
+.iqex-hero-media__overlay {
+	text-align: center !important;
+	align-items: center !important;
+}
+.iqex-hero-media__heading,
+.iqex-hero-media__overlay p,
+.iqex-hero-media__overlay .wp-block-buttons {
+	text-align: center !important;
+	justify-content: center !important;
+}
 </style>' . "\n";
 }, 99 );
 
@@ -87,7 +97,7 @@ add_action( 'wp_footer', function (): void {
     if (href.indexOf("page_id") !== -1 || text === "login" || text === "log in") {
       a.href = "https://app.uiiq.co.uk";
       a.className = (a.className ? a.className + " " : "") + "uiiq-login-btn";
-      a.textContent = "Login";
+      a.textContent = "UIIQ";
       a.setAttribute("target", "_blank");
       a.setAttribute("rel", "noopener");
     }
