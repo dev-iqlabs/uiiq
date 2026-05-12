@@ -86,6 +86,9 @@ img.emoji { display: none !important; }
 .iqex-hero-media .iqex-hero-media__overlay {
 	text-align: center !important;
 	align-items: center !important;
+	margin-inline: auto !important;
+	padding-inline-start: 0 !important;
+	padding-inline-end: 0 !important;
 }
 .iqex-hero-media.is-text-left .iqex-hero-media__heading,
 .iqex-hero-media .iqex-hero-media__heading,
@@ -93,6 +96,8 @@ img.emoji { display: none !important; }
 .iqex-hero-media__overlay .wp-block-buttons {
 	text-align: center !important;
 	justify-content: center !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
 }
 </style>' . "\n";
 }, 99 );
