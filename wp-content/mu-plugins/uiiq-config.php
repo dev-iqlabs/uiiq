@@ -2,7 +2,7 @@
 /**
  * Plugin Name: UIIQ Config
  * Description: IQEX API credential sync, brand colours, Lato font, and uiiq_tenant role for the UIIQ marketing site.
- * Version: 1.4.1
+ * Version: 1.4.2
  * Author: Ultimate Image
  */
 
@@ -200,13 +200,16 @@ a.uiiq-login-btn:focus,
    ══════════════════════════════════════════════════ */
 
 /* ── Section vertical rhythm ──────────────────────*/
-main .wp-block-group.alignfull {
+.modules-strip,
+.why-one-platform,
+.sectors-grid,
+.features-strip,
+.pricing-strip {
 	padding-top:    clamp(56px, 8vw, 96px) !important;
 	padding-bottom: clamp(56px, 8vw, 96px) !important;
-	padding-inline: clamp(20px, 5vw, 80px) !important;
 }
 /* Tighter padding for the CTA band */
-main .wp-block-group.alignfull.uiiq-cta-band {
+.cta-band {
 	padding-top:    clamp(48px, 6vw, 72px) !important;
 	padding-bottom: clamp(48px, 6vw, 72px) !important;
 }
@@ -218,7 +221,7 @@ main h2.wp-block-heading {
 	letter-spacing: -0.025em !important;
 	line-height: 1.18 !important;
 	color: #0a0a0a !important;
-	margin-bottom: 0.5em !important;
+	margin-bottom: 1.2em !important;
 }
 main h3.wp-block-heading {
 	font-size: clamp(1.15rem, 2vw, 1.5rem) !important;
@@ -370,6 +373,16 @@ main .wp-block-paragraph:has(> a:only-child):hover {
 .wp-block-column.pricing-card:hover {
 	border-color: #4F6BDF !important;
 	box-shadow: 0 4px 24px rgba(79,107,223,0.13) !important;
+}
+
+/* ── Pricing strip: more generous card spacing ───── */
+.pricing-strip .wp-block-columns {
+	gap: 32px !important;
+	margin-top: 8px !important;
+	margin-bottom: 32px !important;
+}
+.pricing-strip .wp-block-column:has(> .wp-block-heading) {
+	padding: 40px 36px 36px !important;
 }
 
 /* ── Feature grid: accent icons ─────────────────── */
