@@ -2,7 +2,7 @@
 /**
  * Plugin Name: UIIQ Config
  * Description: IQEX API credential sync, brand colours, Lato font, and uiiq_tenant role for the UIIQ marketing site.
- * Version: 1.4.0
+ * Version: 1.4.1
  * Author: Ultimate Image
  */
 
@@ -551,30 +551,33 @@ add_action( 'wp_footer', function (): void {
   });
   if (sectorsH2) {
     var sectGroup = sectorsH2.closest(".wp-block-group");
-    var colsEl = sectGroup ? sectGroup.querySelector(".wp-block-columns") : null;
-    if (colsEl) {
+    var allCols = sectGroup ? Array.from(sectGroup.querySelectorAll(".wp-block-columns")) : [];
+    if (allCols.length) {
       var grid = document.createElement("div");
       grid.className = "uiiq-sectors-grid";
-      Array.from(colsEl.querySelectorAll("a")).forEach(function(a){
-        var parts = (a.getAttribute("href") || "").replace(/\/$/, "").split("/");
-        var slug = parts[parts.length - 1] || "";
-        var imgUrl = sectorImgs[slug];
-        if (!imgUrl) return;
-        var card = document.createElement("a");
-        card.href = a.getAttribute("href");
-        card.className = "uiiq-sector-card";
-        var img = document.createElement("img");
-        img.src = imgUrl;
-        img.alt = a.textContent.trim();
-        img.loading = "lazy";
-        var lbl = document.createElement("span");
-        lbl.className = "uiiq-sector-label";
-        lbl.textContent = a.textContent.trim();
-        card.appendChild(img);
-        card.appendChild(lbl);
-        grid.appendChild(card);
+      allCols.forEach(function(colsEl){
+        Array.from(colsEl.querySelectorAll("a")).forEach(function(a){
+          var parts = (a.getAttribute("href") || "").replace(/\/$/, "").split("/");
+          var slug = parts[parts.length - 1] || "";
+          var imgUrl = sectorImgs[slug];
+          if (!imgUrl) return;
+          var card = document.createElement("a");
+          card.href = a.getAttribute("href");
+          card.className = "uiiq-sector-card";
+          var img = document.createElement("img");
+          img.src = imgUrl;
+          img.alt = a.textContent.trim();
+          img.loading = "lazy";
+          var lbl = document.createElement("span");
+          lbl.className = "uiiq-sector-label";
+          lbl.textContent = a.textContent.trim();
+          card.appendChild(img);
+          card.appendChild(lbl);
+          grid.appendChild(card);
+        });
       });
-      colsEl.parentNode.replaceChild(grid, colsEl);
+      allCols[0].parentNode.replaceChild(grid, allCols[0]);
+      for (var i = 1; i < allCols.length; i++) { allCols[i].parentNode.removeChild(allCols[i]); }
     }
   }
 
