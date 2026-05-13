@@ -153,6 +153,56 @@ Remaining credentials (SendGrid key, HMAC secrets, POSM API key) are entered via
 
 ---
 
+## mu-plugin CSS architecture (`uiiq-config.php`)
+
+All brand overrides live in `wp-content/mu-plugins/uiiq-config.php` as an inline `<style id="uiiq-brand">` block output at priority 99 (after theme styles).
+
+### Key overrides
+
+| Rule | What it does |
+|---|---|
+| `body { background-color: #ffffff }` | Overrides the theme's warm beige body colour (`rgb(246,244,239)`) |
+| `body::before { display: none }` | Removes the theme's pink radial gradient pseudo-element that bled through all sections |
+| `.modules-strip`, `.why-one-platform`, `.sectors-grid`, `.features-strip`, `.pricing-strip` | Adds `clamp(56px, 8vw, 96px)` top/bottom padding to every homepage section (the theme's `.alignfull` rule never matched because none of these sections carry that class) |
+| `.cta-band` | Tighter `clamp(48px, 6vw, 72px)` padding for the "Ready to see it in action?" band |
+| `main h2.wp-block-heading` | `margin-bottom: 1.2em` — keeps headings away from the card rows below |
+| `.pricing-strip .wp-block-column` | `padding: 40px 36px 36px` — more generous internal card padding |
+| `main .wp-block-column:has(> .wp-block-heading)` | Auto-styles any column that opens with a heading as a white card (border, shadow, radius) |
+
+### Section class names (homepage only)
+
+WordPress adds custom class names to each Group block via the block editor's "Additional CSS class" field. These are the names in use:
+
+`modules-strip` · `why-one-platform` · `sectors-grid` · `features-strip` · `pricing-strip` · `cta-band`
+
+---
+
+## Deploy & cache purge
+
+20i Stack Cache has a 60-hour TTL. After any mu-plugin change:
+
+```bash
+# 1. Commit + push (triggers 20i git integration, but cache still stale)
+git add wp-content/mu-plugins/uiiq-config.php
+git commit -m "style: ..."
+git push origin main
+
+# 2. Direct SSH deploy (faster than waiting for git integration)
+bash deploy.sh
+
+# 3. Purge Stack Cache via web context
+#    (WP-CLI won't work — it runs as root, cache server ignores the purge)
+printf '<?php\ndefine("PLUGIN_DIR",__DIR__."/wp-content/mu-plugins/");\ndefine("WPINC","wp-includes");\nrequire"/usr/share/php/wp-stack-cache.php";\nWPStackCache::purge("all");\necho"ok";\n' \
+  | ssh "uiiq.co.uk@ssh.gb.stackcp.com" "cat > /home/sites/34b/0/0518876bc6/public_html/p.php" \
+  && ssh "uiiq.co.uk@ssh.gb.stackcp.com" "curl -s https://uiiq.co.uk/p.php && rm /home/sites/34b/0/0518876bc6/public_html/p.php"
+```
+
+**Why the web-context purge?** `WPStackCache::purge()` calls `cache.stackcp.com/cache.php?q=all&iam=<unix_user>`. From WP-CLI the unix user is `root`; the cache server only honours purges from `uiiq.co.uk`. Running via an HTTP request sets the correct process owner.
+
+**Never** set `wp-stack-cache-options` via `wp option add --format=json` — WP-CLI stores it as a PHP array but Stack Cache calls `json_decode()` on it expecting a string, causing a fatal error.
+
+---
+
 ## Build order
 
 1. Set up 20i stack + WordPress install + domain

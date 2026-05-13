@@ -40,14 +40,26 @@ define( 'GITHUB_PAT',             'ghp_xxx' );  // for iqex-theme auto-updates
 
 ## Deployment
 
-20i Git integration deploys automatically on push to `main`.
+20i Git integration deploys automatically on push to `main`, but the Stack Cache has a **60-hour TTL** so changes won't be visible until the cache is purged.
 
-For manual/emergency mu-plugin deploy only:
+Full deploy + immediate cache purge:
+
 ```bash
-./deploy.sh
+# 1. Push (triggers git integration in background)
+git push origin main
+
+# 2. Direct SSH deploy (don't wait for git integration)
+bash deploy.sh
+
+# 3. Purge Stack Cache — must run as an HTTP request, not WP-CLI
+printf '<?php\ndefine("PLUGIN_DIR",__DIR__."/wp-content/mu-plugins/");\ndefine("WPINC","wp-includes");\nrequire"/usr/share/php/wp-stack-cache.php";\nWPStackCache::purge("all");\necho"ok";\n' \
+  | ssh "uiiq.co.uk@ssh.gb.stackcp.com" "cat > /home/sites/34b/0/0518876bc6/public_html/p.php" \
+  && ssh "uiiq.co.uk@ssh.gb.stackcp.com" "curl -s https://uiiq.co.uk/p.php && rm /home/sites/34b/0/0518876bc6/public_html/p.php"
 ```
 
-Fill in `HOST_USER` and `WEBROOT` in `deploy.sh` before running (from StackCP → SSH details).
+> **Note:** `wp cache flush` via WP-CLI does NOT purge the Stack Cache — it runs as `root` and the cache server only accepts purges from `uiiq.co.uk`. The web-context script above is the reliable method.
+
+See [SITE-PLAN.md](SITE-PLAN.md) for the full CSS architecture and section class names.
 
 ## Site plan
 
