@@ -2,7 +2,7 @@
 /**
  * Plugin Name: UIIQ Config
  * Description: IQEX API credential sync, brand colours, Lato font, and uiiq_tenant role for the UIIQ marketing site.
- * Version: 1.4.2
+ * Version: 1.4.3
  * Author: Ultimate Image
  */
 
@@ -50,6 +50,9 @@ add_action( 'wp_head', function (): void {
 	--wp--preset--color--primary: #1e2d6b;
 	--wp--preset--color--dark:    #141d4a;
 	--wp--preset--font-family--opuntia: "Lato", sans-serif;
+}
+body {
+	background-color: #ffffff !important;
 }
 body, h1, h2, h3, h4, h5, h6, p, a, li, button, input, select, textarea {
 	font-family: "Lato", sans-serif !important;
