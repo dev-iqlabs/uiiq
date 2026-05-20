@@ -2,7 +2,7 @@
 /**
  * Plugin Name: UIIQ Config
  * Description: IQEX API credential sync, brand colours, Lato font, and uiiq_tenant role for the UIIQ marketing site.
- * Version: 1.4.4
+ * Version: 1.4.5
  * Author: Ultimate Image
  */
 
@@ -99,7 +99,10 @@ a.uiiq-login-btn:focus,
 /* ── Hide clutter from nav (theme adds all pages) ── */
 .wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href="/"]),
 .wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/terms/"]),
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/terms-2/"]),
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/terms-conditions/"]),
 .wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/privacy-policy/"]),
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/privacy/"]),
 .wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/about/"]),
 .wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/contact/"]) {
 	display: none !important;
@@ -482,7 +485,7 @@ add_action( 'wp_footer', function (): void {
   }
 
   /* ── Header nav: reorder + hide unwanted ── */
-  var hideHrefs = ["/", "/terms/", "/privacy-policy/", "/about/", "/contact/"];
+  var hideHrefs = ["/", "/terms/", "/terms-2/", "/terms-conditions/", "/privacy-policy/", "/privacy/", "/about/", "/contact/"];
   var order = ["/grow/", "/run/", "/sell/", "/sectors/", "/pricing/", "/demo/"];
 
   var navList = null;
