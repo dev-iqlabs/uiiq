@@ -166,6 +166,10 @@ a.uiiq-login-btn:focus,
 	margin-bottom: 2rem !important;
 }
 /* ── CTA buttons ─────────────────────────────────── */
+.iqex-hero-media__actions {
+	justify-content: center !important;
+	flex-wrap: wrap !important;
+}
 .iqex-hero-media__overlay .wp-block-buttons {
 	gap: 12px !important;
 	flex-wrap: wrap !important;
