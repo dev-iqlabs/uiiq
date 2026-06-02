@@ -1,6 +1,6 @@
 <?php
 $content = <<<'CONTENT'
-<!-- wp:iqex/hero-media {"headingText":"The back-office that runs itself.","subText":"Bookings. Marketing. Operations. One platform, one login, one price. Built for businesses that don't have time to juggle five tools.","ctaLabel":"Book a Demo","ctaUrl":"/demo","secondaryCtaLabel":"See Pricing","secondaryCtaUrl":"/pricing","heightPreset":"fullscreen","dim":55,"textAlign":"left","typeEffect":true,"scrollScrub":true} /-->
+<!-- wp:iqex/hero-media {"streamVideoId":"dfab78be-59fb-49f6-9cf7-4428e3c19626","streamPullzone":"vz-67561d64-bd0","headingText":"The back-office that runs itself.","subText":"Bookings. Marketing. Operations. One platform, one login, one price. Built for businesses that don't have time to juggle five tools.","ctaLabel":"Book a Demo","ctaUrl":"/demo","secondaryCtaLabel":"See Pricing","secondaryCtaUrl":"/pricing","heightPreset":"fullscreen","dim":55,"textAlign":"left","typeEffect":true,"scrollScrub":true} /-->
 
 <!-- wp:group {"className":"modules-strip","layout":{"type":"constrained"}} -->
 <div class="wp-block-group modules-strip">
