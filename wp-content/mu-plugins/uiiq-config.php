@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: UIIQ Config
- * Description: IQEX API credential sync, brand colours, Lato font, and uiiq_tenant role for the UIIQ marketing site.
- * Version: 1.4.5
+ * Description: IQEX API credential sync, brand colours, Lato font, uiiq_tenant role, and retired-sector redirects for the UIIQ marketing site.
+ * Version: 1.5.0
  * Author: Ultimate Image
  */
 
@@ -38,6 +38,43 @@ remove_filter( 'wp_mail',          'wp_staticize_emoji_for_email' );
 add_filter( 'tiny_mce_plugins', function( $plugins ) {
 	return is_array( $plugins ) ? array_diff( $plugins, [ 'wpemoji' ] ) : [];
 } );
+
+/**
+ * Retired sector slugs → 301s (2026-07-30).
+ *
+ * The sector landing pages were realigned to mirror the live UIIQ sector presets,
+ * so seven May-2026 marketing slugs no longer exist as pages. Each is redirected
+ * to the closest sector we actually provision, rather than 404ing indexed URLs.
+ *
+ * Keep this list in step with build/2026-07-sectors.php. Remove an entry only
+ * once the old URL has genuinely dropped out of the index.
+ */
+add_action( 'template_redirect', function (): void {
+	if ( ! is_404() ) {
+		return;
+	}
+
+	static $map = [
+		'hospitality'    => 'attractions',       // bookings-led venues → Visitor Attraction
+		'events'         => 'attractions',       // ticketing + capacity → Visitor Attraction
+		'theatre'        => 'attractions',       // ticketed performance venue
+		'sports-leisure' => 'dance-schools',     // classes + memberships → Dance School
+		'arts-culture'   => 'museums',           // → Museum
+		'public-sector'  => 'museums',           // civic venue hire + collections → Museum
+		'health-wellness'=> 'health-care',       // renamed to match the preset
+	];
+
+	$path = trim( (string) parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' );
+	if ( strpos( $path, 'sectors/' ) !== 0 ) {
+		return;
+	}
+
+	$slug = substr( $path, strlen( 'sectors/' ) );
+	if ( isset( $map[ $slug ] ) ) {
+		wp_safe_redirect( home_url( '/sectors/' . $map[ $slug ] . '/' ), 301 );
+		exit;
+	}
+}, 1 );
 
 // UIIQ brand styles — loaded late (priority 99) to override iqex-theme defaults.
 add_action( 'wp_head', function (): void {
