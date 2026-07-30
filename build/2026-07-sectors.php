@@ -118,6 +118,32 @@ $sectors = [
 'seo' => 'retail EPOS and stock management software UK',
 ],
 
+// ─────────────────────────────────────────────────────────────── hospitality
+[
+'id' => 0, 'slug' => 'hospitality', 'title' => 'Pubs, Restaurants & Hospitality',
+'preset' => 'Hospitality',
+'card' => 'Pubs, restaurants, cafés and bars — service, kitchen, tables and bookings.',
+'headline' => 'Front of house, kitchen and marketing on one system.',
+'sub' => 'Table bookings, service, the kitchen pass and the menus that drive them — plus the marketing to fill a quiet Tuesday. One platform, one bill.',
+'pains' => [
+  'Bookings come in on three platforms and the host stand reconciles them on paper',
+  'The menu exists in six places and the allergen sheet is out of date in at least four of them',
+  'You know who came in tonight and nothing at all about getting them back next month',
+],
+'features' => [
+  ['Tables & bookings', 'Table service and table management alongside online booking and enquiry handling — covers, deposits and no-show protection in the same place as the floor plan.'],
+  ['Till & service', 'Walk-in sales and till sessions built for service, with mixed payments on one transaction. Card-present costs 1.0% platform fee on top of your own card processing.'],
+  ['Kitchen display', 'Orders straight from the table to a kitchen display system with order tickets — no shouting, no paper dockets, no lost covers on a busy Saturday.'],
+  ['Menus & allergens', 'One live menu drives your menu boards, your website and your table QR. The Menu Kit prints allergen cards, shelf labels and table QR from that same menu, so it cannot drift out of date.'],
+  ['Fill the quiet nights', 'Email and SMS to your customer list, social scheduling, and AI-drafted campaigns for events and offers — segmented by who actually comes in and what they order.'],
+  ['Gift cards & events', 'Branded gift cards redeemable at the till, promo codes for midweek offers, and an event hub that fans out the marketing for a quiz night or a supper club once you have created it.'],
+],
+'fee' => 'Card-present 1.0% · table bookings 2.0%',
+'plan' => 'A single site usually fits Grow · Hospitality; multi-site and heavy marketing land on Scale.',
+'cta' => 'See UIIQ configured for your pub or restaurant.',
+'seo' => 'pub and restaurant booking, EPOS and kitchen software UK',
+],
+
 // ─────────────────────────────────────────────────────────────── dance schools
 [
 'id' => 25, 'slug' => 'dance-schools', 'title' => 'Dance & Performing Arts Schools',

@@ -54,8 +54,9 @@ add_action( 'template_redirect', function (): void {
 		return;
 	}
 
+	// 'hospitality' is NOT here — pubs and restaurants are their own sector with
+	// their own page, distinct from a visitor attraction (Steve 2026-07-30).
 	static $map = [
-		'hospitality'    => 'attractions',       // bookings-led venues → Visitor Attraction
 		'events'         => 'attractions',       // ticketing + capacity → Visitor Attraction
 		'theatre'        => 'attractions',       // ticketed performance venue
 		'sports-leisure' => 'dance-schools',     // classes + memberships → Dance School
