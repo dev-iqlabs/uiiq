@@ -330,19 +330,42 @@ $sectors = [
 
 // ─────────────────────────────────────────────────────── page render helpers
 
-/** Render an iqex/hero-media block, JSON-encoding the attributes properly. */
+/**
+ * Page hero — a plain heading group, NOT the iqex/hero-media block.
+ *
+ * The May-2026 sector pages called hero-media with attribute names that do not
+ * exist on it (`overlayHeading`, `overlaySub`, `ctaOneLabel`, `ctaTwoLabel`,
+ * `dimLevel`, and `heightPreset:"large"` which is not in its enum). The block
+ * takes `headingText` / `subText` / `ctaLabel` / `secondaryCtaLabel`, so every
+ * one of those heroes rendered as an empty band — no text, no CTA, and **no
+ * <h1> on any sector page** since they were built.
+ *
+ * Using the correct names would render, but hero-media is designed around a
+ * Bunny Stream video or a poster image and we have neither per sector, so it
+ * would be text over an empty dimmed box. A constrained heading group is the
+ * same pattern the old pricing page used, always renders, and gives each page
+ * a real H1.
+ */
 function uiiq_hero(string $heading, string $sub): string {
-    $attrs = json_encode([
-        'overlayHeading' => $heading,
-        'overlaySub'     => $sub,
-        'ctaOneLabel'    => 'Book a Demo',
-        'ctaOneUrl'      => '/demo',
-        'ctaTwoLabel'    => 'See Pricing',
-        'ctaTwoUrl'      => '/pricing',
-        'heightPreset'   => 'large',
-        'dimLevel'       => 50,
-    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-    return "<!-- wp:iqex/hero-media {$attrs} /-->\n";
+    $h = uiiq_esc($heading);
+    $s = uiiq_esc($sub);
+    return <<<HERO
+<!-- wp:group {"layout":{"type":"constrained","contentSize":"820px"},"style":{"spacing":{"padding":{"top":"clamp(60px,8vw,100px)","bottom":"clamp(40px,5vw,60px)"}}}} -->
+<div class="wp-block-group" style="padding-top:clamp(60px,8vw,100px);padding-bottom:clamp(40px,5vw,60px)">
+<!-- wp:heading {"textAlign":"center","level":1,"style":{"typography":{"letterSpacing":"-0.03em"}}} -->
+<h1 class="wp-block-heading has-text-align-center" style="letter-spacing:-0.03em">{$h}</h1>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"spacing":{"margin":{"top":"16px"}},"typography":{"fontSize":"1.15rem"}}} -->
+<p class="has-text-align-center" style="margin-top:16px;font-size:1.15rem">{$s}</p>
+<!-- /wp:paragraph -->
+<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"},"style":{"spacing":{"margin":{"top":"28px"}}}} -->
+<div class="wp-block-buttons" style="margin-top:28px">
+<!-- wp:button --><div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="/demo">Book a Demo</a></div><!-- /wp:button -->
+<!-- wp:button {"className":"is-style-outline"} --><div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="/pricing">See Pricing</a></div><!-- /wp:button -->
+</div><!-- /wp:buttons -->
+</div><!-- /wp:group -->
+
+HERO;
 }
 
 function uiiq_sector_content(array $s): string {

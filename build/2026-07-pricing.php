@@ -19,7 +19,24 @@
 const PRICING_PAGE_ID = 10;
 
 $content = <<<'CONTENT'
-<!-- wp:iqex/hero-media {"overlayHeading":"Pay for what you use.","overlaySub":"UIIQ starts at £39 a month. From there the bill scales with your usage, your staff and your sales — so a small operation stays small on the invoice, and nobody pays for a tier they have outgrown or never filled.","ctaOneLabel":"Estimate your bill","ctaOneUrl":"https://app.uiiq.co.uk/pricing","ctaTwoLabel":"Book a Demo","ctaTwoUrl":"/demo","heightPreset":"large","dimLevel":50} /-->
+<!-- Hero: a plain heading group, not iqex/hero-media. That block needs a Bunny
+     Stream video or a poster image, and the May-2026 sector pages called it with
+     attribute names it does not have (overlayHeading/ctaOneLabel), which is why
+     their heroes rendered empty. This keeps a real level-one heading on the page. -->
+<!-- wp:group {"layout":{"type":"constrained","contentSize":"820px"},"style":{"spacing":{"padding":{"top":"clamp(60px,8vw,100px)","bottom":"clamp(40px,5vw,60px)"}}}} -->
+<div class="wp-block-group" style="padding-top:clamp(60px,8vw,100px);padding-bottom:clamp(40px,5vw,60px)">
+<!-- wp:heading {"textAlign":"center","level":1,"style":{"typography":{"letterSpacing":"-0.03em"}}} -->
+<h1 class="wp-block-heading has-text-align-center" style="letter-spacing:-0.03em">Pay for what you use.</h1>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","style":{"spacing":{"margin":{"top":"16px"}},"typography":{"fontSize":"1.15rem"}}} -->
+<p class="has-text-align-center" style="margin-top:16px;font-size:1.15rem">UIIQ starts at <strong>&pound;39 a month</strong>. From there the bill scales with your usage, your staff and your sales &#8212; so a small operation stays small on the invoice, and nobody pays for a tier they have outgrown or never filled.</p>
+<!-- /wp:paragraph -->
+<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"},"style":{"spacing":{"margin":{"top":"28px"}}}} -->
+<div class="wp-block-buttons" style="margin-top:28px">
+<!-- wp:button --><div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="https://app.uiiq.co.uk/pricing">Estimate your bill</a></div><!-- /wp:button -->
+<!-- wp:button {"className":"is-style-outline"} --><div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="/demo">Book a Demo</a></div><!-- /wp:button -->
+</div><!-- /wp:buttons -->
+</div><!-- /wp:group -->
 
 <!-- wp:group {"className":"plans","layout":{"type":"constrained"}} -->
 <div class="wp-block-group plans">
