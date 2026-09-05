@@ -2,7 +2,7 @@
 /**
  * Plugin Name: UIIQ Config
  * Description: IQEX API credential sync, brand colours, Lato font, uiiq_tenant role, and retired-sector redirects for the UIIQ marketing site.
- * Version: 1.5.2
+ * Version: 1.5.3
  * Author: Ultimate Image
  */
 
@@ -143,7 +143,9 @@ a.uiiq-login-btn:focus,
 .wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/privacy/"]),
 .wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/about/"]),
 .wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/contact/"]),
-.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/delete/"]) {
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/delete/"]),
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/refunds/"]),
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/cookie-policy/"]) {
 	display: none !important;
 }
 
@@ -385,7 +387,9 @@ main .wp-block-paragraph:has(> a:only-child):hover {
 .wp-block-template-part .wp-block-navigation-item:has(> a[href$="/contact/"]),
 .wp-block-template-part .wp-block-navigation-item:has(> a[href$="/terms/"]),
 .wp-block-template-part .wp-block-navigation-item:has(> a[href$="/privacy-policy/"]),
-.wp-block-template-part .wp-block-navigation-item:has(> a[href$="/delete/"]) {
+.wp-block-template-part .wp-block-navigation-item:has(> a[href$="/delete/"]),
+.wp-block-template-part .wp-block-navigation-item:has(> a[href$="/refunds/"]),
+.wp-block-template-part .wp-block-navigation-item:has(> a[href$="/cookie-policy/"]) {
 	display: none !important;
 }
 
@@ -503,20 +507,18 @@ footer a:hover,
 
 // Footer Legal list. It lives in the theme part (parts/footer.html), so it is
 // corrected at render time rather than by editing the theme:
-//  - Privacy and Terms point at slugs that do not exist; use the real pages.
-//  - Returns Policy (draft) and Cookie Policy (no page) would 404, so drop them
-//    until those pages exist.
+//  - Privacy, Terms and Returns point at slugs that do not exist; use the real
+//    pages (the returns page is now "Refunds & Cancellations" at /refunds/).
 //  - Data Deletion Requests belongs here, not in the top nav.
 add_filter( 'render_block_core/list', function ( string $content ): string {
 	if ( strpos( $content, 'href="/privacy-policy/"' ) === false && strpos( $content, 'href="/cookie-policy/"' ) === false ) {
 		return $content;
 	}
 	$content = str_replace(
-		[ 'href="/privacy-policy/"', 'href="/terms-conditions/"' ],
-		[ 'href="/privacy/"',        'href="/terms/"' ],
+		[ 'href="/privacy-policy/"', 'href="/terms-conditions/"', 'href="/refund-returns/"', '>Returns Policy<' ],
+		[ 'href="/privacy/"',        'href="/terms/"',            'href="/refunds/"',        '>Refunds &amp; Cancellations<' ],
 		$content
 	);
-	$content = preg_replace( '#<li>\s*<a href="/(refund-returns|cookie-policy)/"[^>]*>.*?</a>\s*</li>\s*#s', '', $content ) ?? $content;
 	if ( strpos( $content, 'href="/delete/"' ) === false ) {
 		$item    = '<li><a href="/delete/" style="color:#a0a0a0">Data Deletion Requests</a></li>';
 		$content = preg_replace( '#</ul>\s*$#', $item . '</ul>', $content, 1 ) ?? $content;
@@ -552,7 +554,7 @@ add_action( 'wp_footer', function (): void {
   }
 
   /* ── Header nav: reorder + hide unwanted ── */
-  var hideHrefs = ["/", "/terms/", "/terms-2/", "/terms-conditions/", "/privacy-policy/", "/privacy/", "/about/", "/contact/", "/delete/"];
+  var hideHrefs = ["/", "/terms/", "/terms-2/", "/terms-conditions/", "/privacy-policy/", "/privacy/", "/about/", "/contact/", "/delete/", "/refunds/", "/cookie-policy/"];
   var order = ["/grow/", "/run/", "/sell/", "/sectors/", "/pricing/", "/demo/"];
 
   var navList = null;
