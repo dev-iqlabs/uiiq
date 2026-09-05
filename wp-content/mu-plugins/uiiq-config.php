@@ -567,7 +567,7 @@ add_action( 'wp_footer', function (): void {
   }
 
   /* ── Footer nav: hide unwanted items ── */
-  var footerHide = ["/", "/about/", "/contact/", "/terms/", "/privacy-policy/", "/delete/"];
+  var footerHide = ["/", "/about/", "/contact/", "/terms/", "/privacy-policy/"];
   document.querySelectorAll(".wp-block-template-part a, footer a").forEach(function(a){
     var path = (a.getAttribute("href") || "").replace(/^https?:\/\/[^\/]+/, "").replace(/\/?$/, "/");
     if (footerHide.indexOf(path) !== -1) {
