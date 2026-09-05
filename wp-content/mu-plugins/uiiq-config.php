@@ -2,7 +2,7 @@
 /**
  * Plugin Name: UIIQ Config
  * Description: IQEX API credential sync, brand colours, Lato font, uiiq_tenant role, and retired-sector redirects for the UIIQ marketing site.
- * Version: 1.5.3
+ * Version: 1.5.4
  * Author: Ultimate Image
  */
 
@@ -609,8 +609,10 @@ add_action( 'wp_footer', function (): void {
     var emojiRx = /\p{Emoji_Presentation}|\p{Extended_Pictographic}/gu;
     (function stripEmoji(node) {
       if (node.nodeType === 3) {
-        var cleaned = node.textContent.replace(emojiRx, "").replace(/^\s+|\s+$/g, "").replace(/\s{2,}/g, " ");
-        if (cleaned !== node.textContent) node.textContent = cleaned;
+        /* Only touch nodes that actually held an emoji: trimming every text node
+           eats the spaces around inline elements ("our <a>Privacy Policy</a>"). */
+        var cleaned = node.textContent.replace(emojiRx, "");
+        if (cleaned !== node.textContent) node.textContent = cleaned.replace(/\s{2,}/g, " ");
       } else if (node.nodeType === 1 && !/^(SCRIPT|STYLE|TEXTAREA)$/.test(node.tagName)) {
         if (node.tagName === "IMG" && (node.classList.contains("emoji") || (node.src || "").indexOf("emoji") !== -1)) {
           node.style.display = "none"; return;
