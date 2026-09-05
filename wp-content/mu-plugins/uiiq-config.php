@@ -2,7 +2,7 @@
 /**
  * Plugin Name: UIIQ Config
  * Description: IQEX API credential sync, brand colours, Lato font, uiiq_tenant role, and retired-sector redirects for the UIIQ marketing site.
- * Version: 1.5.0
+ * Version: 1.5.1
  * Author: Ultimate Image
  */
 
@@ -142,7 +142,8 @@ a.uiiq-login-btn:focus,
 .wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/privacy-policy/"]),
 .wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/privacy/"]),
 .wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/about/"]),
-.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/contact/"]) {
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/contact/"]),
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/delete/"]) {
 	display: none !important;
 }
 
@@ -383,7 +384,8 @@ main .wp-block-paragraph:has(> a:only-child):hover {
 .wp-block-template-part .wp-block-navigation-item:has(> a[href$="/about/"]),
 .wp-block-template-part .wp-block-navigation-item:has(> a[href$="/contact/"]),
 .wp-block-template-part .wp-block-navigation-item:has(> a[href$="/terms/"]),
-.wp-block-template-part .wp-block-navigation-item:has(> a[href$="/privacy-policy/"]) {
+.wp-block-template-part .wp-block-navigation-item:has(> a[href$="/privacy-policy/"]),
+.wp-block-template-part .wp-block-navigation-item:has(> a[href$="/delete/"]) {
 	display: none !important;
 }
 
@@ -499,6 +501,16 @@ footer a:hover,
 </style>' . "\n";
 }, 99 );
 
+// Data Deletion Requests belongs with the other legal links, not in the top nav.
+// The footer Legal list lives in the theme part, so append the item at render time.
+add_filter( 'render_block_core/list', function ( string $content ): string {
+	if ( strpos( $content, '/cookie-policy/' ) === false || strpos( $content, '/delete/' ) !== false ) {
+		return $content;
+	}
+	$item = '<li><a href="/delete/" style="color:#a0a0a0">Data Deletion Requests</a></li>';
+	return preg_replace( '#</ul>\s*$#', $item . '</ul>', $content, 1 ) ?? $content;
+}, 10 );
+
 // Redirect existing theme Login link to app.uiiq.co.uk, reorder nav, and hide clutter.
 add_action( 'wp_footer', function (): void {
 	echo '<script>
@@ -527,7 +539,7 @@ add_action( 'wp_footer', function (): void {
   }
 
   /* ── Header nav: reorder + hide unwanted ── */
-  var hideHrefs = ["/", "/terms/", "/terms-2/", "/terms-conditions/", "/privacy-policy/", "/privacy/", "/about/", "/contact/"];
+  var hideHrefs = ["/", "/terms/", "/terms-2/", "/terms-conditions/", "/privacy-policy/", "/privacy/", "/about/", "/contact/", "/delete/"];
   var order = ["/grow/", "/run/", "/sell/", "/sectors/", "/pricing/", "/demo/"];
 
   var navList = null;
@@ -555,7 +567,7 @@ add_action( 'wp_footer', function (): void {
   }
 
   /* ── Footer nav: hide unwanted items ── */
-  var footerHide = ["/", "/about/", "/contact/", "/terms/", "/privacy-policy/"];
+  var footerHide = ["/", "/about/", "/contact/", "/terms/", "/privacy-policy/", "/delete/"];
   document.querySelectorAll(".wp-block-template-part a, footer a").forEach(function(a){
     var path = (a.getAttribute("href") || "").replace(/^https?:\/\/[^\/]+/, "").replace(/\/?$/, "/");
     if (footerHide.indexOf(path) !== -1) {
