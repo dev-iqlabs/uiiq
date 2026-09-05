@@ -2,7 +2,7 @@
 /**
  * Plugin Name: UIIQ Config
  * Description: IQEX API credential sync, brand colours, Lato font, uiiq_tenant role, and retired-sector redirects for the UIIQ marketing site.
- * Version: 1.5.4
+ * Version: 1.5.5
  * Author: Ultimate Image
  */
 
@@ -524,6 +524,20 @@ add_filter( 'render_block_core/list', function ( string $content ): string {
 		$content = preg_replace( '#</ul>\s*$#', $item . '</ul>', $content, 1 ) ?? $content;
 	}
 	return $content;
+}, 10 );
+
+// Footer company line. UiiQ is an IQLabs Ltd product (the theme part still
+// carries Ultimate Image Ltd's details). IQLabs Ltd is not VAT-registered, so
+// no VAT number is shown.
+add_filter( 'render_block_core/paragraph', function ( string $content ): string {
+	if ( strpos( $content, 'Ultimate Image Ltd' ) === false && strpos( $content, '12602498' ) === false ) {
+		return $content;
+	}
+	return str_replace(
+		[ 'Ultimate Image Ltd', 'Company No. 12602498 &middot; VAT No. 400880133', 'Company No. 12602498 · VAT No. 400880133' ],
+		[ 'IQLabs Ltd',         'Company No. 12077784 &middot; Registered in England and Wales', 'Company No. 12077784 · Registered in England and Wales' ],
+		$content
+	);
 }, 10 );
 
 // Redirect existing theme Login link to app.uiiq.co.uk, reorder nav, and hide clutter.
