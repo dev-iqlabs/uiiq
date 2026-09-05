@@ -2,7 +2,7 @@
 /**
  * Plugin Name: UIIQ Config
  * Description: IQEX API credential sync, brand colours, Lato font, uiiq_tenant role, and retired-sector redirects for the UIIQ marketing site.
- * Version: 1.5.1
+ * Version: 1.5.2
  * Author: Ultimate Image
  */
 
@@ -501,14 +501,27 @@ footer a:hover,
 </style>' . "\n";
 }, 99 );
 
-// Data Deletion Requests belongs with the other legal links, not in the top nav.
-// The footer Legal list lives in the theme part, so append the item at render time.
+// Footer Legal list. It lives in the theme part (parts/footer.html), so it is
+// corrected at render time rather than by editing the theme:
+//  - Privacy and Terms point at slugs that do not exist; use the real pages.
+//  - Returns Policy (draft) and Cookie Policy (no page) would 404, so drop them
+//    until those pages exist.
+//  - Data Deletion Requests belongs here, not in the top nav.
 add_filter( 'render_block_core/list', function ( string $content ): string {
-	if ( strpos( $content, '/cookie-policy/' ) === false || strpos( $content, '/delete/' ) !== false ) {
+	if ( strpos( $content, 'href="/privacy-policy/"' ) === false && strpos( $content, 'href="/cookie-policy/"' ) === false ) {
 		return $content;
 	}
-	$item = '<li><a href="/delete/" style="color:#a0a0a0">Data Deletion Requests</a></li>';
-	return preg_replace( '#</ul>\s*$#', $item . '</ul>', $content, 1 ) ?? $content;
+	$content = str_replace(
+		[ 'href="/privacy-policy/"', 'href="/terms-conditions/"' ],
+		[ 'href="/privacy/"',        'href="/terms/"' ],
+		$content
+	);
+	$content = preg_replace( '#<li>\s*<a href="/(refund-returns|cookie-policy)/"[^>]*>.*?</a>\s*</li>\s*#s', '', $content ) ?? $content;
+	if ( strpos( $content, 'href="/delete/"' ) === false ) {
+		$item    = '<li><a href="/delete/" style="color:#a0a0a0">Data Deletion Requests</a></li>';
+		$content = preg_replace( '#</ul>\s*$#', $item . '</ul>', $content, 1 ) ?? $content;
+	}
+	return $content;
 }, 10 );
 
 // Redirect existing theme Login link to app.uiiq.co.uk, reorder nav, and hide clutter.
@@ -568,7 +581,7 @@ add_action( 'wp_footer', function (): void {
 
   /* ── Footer nav: hide unwanted items ── */
   var footerHide = ["/", "/about/", "/contact/", "/terms/", "/privacy-policy/"];
-  document.querySelectorAll(".wp-block-template-part a, footer a").forEach(function(a){
+  document.querySelectorAll(".wp-block-template-part .wp-block-navigation a, footer .wp-block-navigation a").forEach(function(a){
     var path = (a.getAttribute("href") || "").replace(/^https?:\/\/[^\/]+/, "").replace(/\/?$/, "/");
     if (footerHide.indexOf(path) !== -1) {
       var li = a.closest("li");
