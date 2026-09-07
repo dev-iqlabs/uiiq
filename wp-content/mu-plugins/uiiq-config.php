@@ -2,7 +2,7 @@
 /**
  * Plugin Name: UIIQ Config
  * Description: IQEX API credential sync, brand colours, Lato font, uiiq_tenant role, and retired-sector redirects for the UIIQ marketing site.
- * Version: 1.5.0
+ * Version: 1.5.5
  * Author: Ultimate Image
  */
 
@@ -54,8 +54,9 @@ add_action( 'template_redirect', function (): void {
 		return;
 	}
 
+	// 'hospitality' is NOT here — pubs and restaurants are their own sector with
+	// their own page, distinct from a visitor attraction (Steve 2026-07-30).
 	static $map = [
-		'hospitality'    => 'attractions',       // bookings-led venues → Visitor Attraction
 		'events'         => 'attractions',       // ticketing + capacity → Visitor Attraction
 		'theatre'        => 'attractions',       // ticketed performance venue
 		'sports-leisure' => 'dance-schools',     // classes + memberships → Dance School
@@ -141,7 +142,10 @@ a.uiiq-login-btn:focus,
 .wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/privacy-policy/"]),
 .wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/privacy/"]),
 .wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/about/"]),
-.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/contact/"]) {
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/contact/"]),
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/delete/"]),
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/refunds/"]),
+.wp-block-navigation .wp-block-navigation-item:has(> .wp-block-navigation-item__content[href$="/cookie-policy/"]) {
 	display: none !important;
 }
 
@@ -382,7 +386,10 @@ main .wp-block-paragraph:has(> a:only-child):hover {
 .wp-block-template-part .wp-block-navigation-item:has(> a[href$="/about/"]),
 .wp-block-template-part .wp-block-navigation-item:has(> a[href$="/contact/"]),
 .wp-block-template-part .wp-block-navigation-item:has(> a[href$="/terms/"]),
-.wp-block-template-part .wp-block-navigation-item:has(> a[href$="/privacy-policy/"]) {
+.wp-block-template-part .wp-block-navigation-item:has(> a[href$="/privacy-policy/"]),
+.wp-block-template-part .wp-block-navigation-item:has(> a[href$="/delete/"]),
+.wp-block-template-part .wp-block-navigation-item:has(> a[href$="/refunds/"]),
+.wp-block-template-part .wp-block-navigation-item:has(> a[href$="/cookie-policy/"]) {
 	display: none !important;
 }
 
@@ -498,6 +505,41 @@ footer a:hover,
 </style>' . "\n";
 }, 99 );
 
+// Footer Legal list. It lives in the theme part (parts/footer.html), so it is
+// corrected at render time rather than by editing the theme:
+//  - Privacy, Terms and Returns point at slugs that do not exist; use the real
+//    pages (the returns page is now "Refunds & Cancellations" at /refunds/).
+//  - Data Deletion Requests belongs here, not in the top nav.
+add_filter( 'render_block_core/list', function ( string $content ): string {
+	if ( strpos( $content, 'href="/privacy-policy/"' ) === false && strpos( $content, 'href="/cookie-policy/"' ) === false ) {
+		return $content;
+	}
+	$content = str_replace(
+		[ 'href="/privacy-policy/"', 'href="/terms-conditions/"', 'href="/refund-returns/"', '>Returns Policy<' ],
+		[ 'href="/privacy/"',        'href="/terms/"',            'href="/refunds/"',        '>Refunds &amp; Cancellations<' ],
+		$content
+	);
+	if ( strpos( $content, 'href="/delete/"' ) === false ) {
+		$item    = '<li><a href="/delete/" style="color:#a0a0a0">Data Deletion Requests</a></li>';
+		$content = preg_replace( '#</ul>\s*$#', $item . '</ul>', $content, 1 ) ?? $content;
+	}
+	return $content;
+}, 10 );
+
+// Footer company line. UiiQ is an IQLabs Ltd product (the theme part still
+// carries Ultimate Image Ltd's details). IQLabs Ltd is not VAT-registered, so
+// no VAT number is shown.
+add_filter( 'render_block_core/paragraph', function ( string $content ): string {
+	if ( strpos( $content, 'Ultimate Image Ltd' ) === false && strpos( $content, '12602498' ) === false ) {
+		return $content;
+	}
+	return str_replace(
+		[ 'Ultimate Image Ltd', 'Company No. 12602498 &middot; VAT No. 400880133', 'Company No. 12602498 · VAT No. 400880133' ],
+		[ 'IQLabs Ltd',         'Company No. 12077784 &middot; Registered in England and Wales', 'Company No. 12077784 · Registered in England and Wales' ],
+		$content
+	);
+}, 10 );
+
 // Redirect existing theme Login link to app.uiiq.co.uk, reorder nav, and hide clutter.
 add_action( 'wp_footer', function (): void {
 	echo '<script>
@@ -526,7 +568,7 @@ add_action( 'wp_footer', function (): void {
   }
 
   /* ── Header nav: reorder + hide unwanted ── */
-  var hideHrefs = ["/", "/terms/", "/terms-2/", "/terms-conditions/", "/privacy-policy/", "/privacy/", "/about/", "/contact/"];
+  var hideHrefs = ["/", "/terms/", "/terms-2/", "/terms-conditions/", "/privacy-policy/", "/privacy/", "/about/", "/contact/", "/delete/", "/refunds/", "/cookie-policy/"];
   var order = ["/grow/", "/run/", "/sell/", "/sectors/", "/pricing/", "/demo/"];
 
   var navList = null;
@@ -555,7 +597,7 @@ add_action( 'wp_footer', function (): void {
 
   /* ── Footer nav: hide unwanted items ── */
   var footerHide = ["/", "/about/", "/contact/", "/terms/", "/privacy-policy/"];
-  document.querySelectorAll(".wp-block-template-part a, footer a").forEach(function(a){
+  document.querySelectorAll(".wp-block-template-part .wp-block-navigation a, footer .wp-block-navigation a").forEach(function(a){
     var path = (a.getAttribute("href") || "").replace(/^https?:\/\/[^\/]+/, "").replace(/\/?$/, "/");
     if (footerHide.indexOf(path) !== -1) {
       var li = a.closest("li");
@@ -581,8 +623,10 @@ add_action( 'wp_footer', function (): void {
     var emojiRx = /\p{Emoji_Presentation}|\p{Extended_Pictographic}/gu;
     (function stripEmoji(node) {
       if (node.nodeType === 3) {
-        var cleaned = node.textContent.replace(emojiRx, "").replace(/^\s+|\s+$/g, "").replace(/\s{2,}/g, " ");
-        if (cleaned !== node.textContent) node.textContent = cleaned;
+        /* Only touch nodes that actually held an emoji: trimming every text node
+           eats the spaces around inline elements ("our <a>Privacy Policy</a>"). */
+        var cleaned = node.textContent.replace(emojiRx, "");
+        if (cleaned !== node.textContent) node.textContent = cleaned.replace(/\s{2,}/g, " ");
       } else if (node.nodeType === 1 && !/^(SCRIPT|STYLE|TEXTAREA)$/.test(node.tagName)) {
         if (node.tagName === "IMG" && (node.classList.contains("emoji") || (node.src || "").indexOf("emoji") !== -1)) {
           node.style.display = "none"; return;
